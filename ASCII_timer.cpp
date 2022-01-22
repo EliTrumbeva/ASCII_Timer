@@ -369,25 +369,31 @@ int main()
         k /= 60;
         int hours = k;
 
-        system("CLS");
+        //while (time > 0)
+       // {
+           // system("CLS");
+            cout << hours;
 
-        for (int i = 0; i < LENGTH; i++)
-        {
-            if (hours > 0)
+            for (int i = 0; i < LENGTH; i++)
             {
-                printTime(hours, i);
-                printTime(min, i);
-                printTime(sec, i);
+                if (hours > 0)
+                {
+                    printTime(hours, i);
+                    printTime(min, i);
+                    printTime(sec, i);
+                }
+                else if (min > 0)
+                {
+                    printTime(min, i);
+                    printTime(sec, i);
+                }
+                else
+                    printTime(sec, i);
+                cout << endl;
             }
-            else if (min > 0)
-            {
-                printTime(min, i);
-                printTime(sec, i);
-            }
-            else
-                printTime(sec, i);
-            cout << endl;
-        }
+         /*   Sleep(1000);
+            time--;*/
+        //}
     
     return 0;
 }

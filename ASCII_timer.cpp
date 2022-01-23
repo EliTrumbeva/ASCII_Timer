@@ -1,10 +1,30 @@
+/**
+*
+* Solution to course project # 9
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2021/2022
+*
+* @author Eli Trumbeva
+* @idnumber 3MI0600110
+* @compiler vc
+*
+* <ASCII timer>
+*
+*/
+
 #include <iostream>
 #include "windows.h"
+#include <time.h>
+#include <stdlib.h>
 using namespace std;
 
 const int LENGTH = 11;
 const int SIZE_OF_ONE = 2;
-char colon[LENGTH][SIZE_OF_ONE];
+const int SIZE_OF_COLON = 3;
+
+char colon[LENGTH][SIZE_OF_COLON];
+char dots[LENGTH][SIZE_OF_COLON];
 char str0[LENGTH][LENGTH];
 char str1[LENGTH][SIZE_OF_ONE];
 char str2[LENGTH][LENGTH];
@@ -17,22 +37,53 @@ char str8[LENGTH][LENGTH];
 char str9[LENGTH][LENGTH];
 
 
-void templateColon(char str[LENGTH][SIZE_OF_ONE])
+void templateColon(char str[LENGTH][SIZE_OF_COLON])
 {
     for (int i = 0; i < 11; i++)
     {
         str[i][0] = ' ';
-        str[i][1] = '\0';
+        str[i][1] = ' ';
+        str[i][2] = '\0';
+    }
+}
+
+void templateDots(char str[LENGTH][SIZE_OF_COLON])
+{
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 2; j++)
+            str[i][j] = ' ';
+        str[i][2] = '\0';
+    }
+
+    for (int j = 0; j < 2; j++)
+        str[4][j] = ':';
+    str[4][2] = '\0';
+
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+            str[i + 5][j] = ' ';
+        str[i + 5][2] = '\0';
+    }
+
+    for (int j = 0; j < 2; j++)
+        str[7][j] = ':';
+    str[7][2] = '\0';
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 4; j++)
+            str[i + 8][j] = ' ';
+        str[i + 8][2] = '\0';
     }
 }
 
 void template0(char str0[LENGTH][LENGTH])
 {
     for (int i = 0; i < 10; i++)
-    {
         str0[0][i] = '0';
-        str0[0][10] = '\0';
-    }
+    str0[0][10] = '\0';
 
     for (int j = 0; j < 9; j++)
     {
@@ -55,7 +106,6 @@ void template1(char str1[LENGTH][SIZE_OF_ONE])
         str1[i][0] = '1';
         str1[i][1] = '\0';
     }
-
 }
 
 void template2(char str2[LENGTH][LENGTH])
@@ -81,7 +131,7 @@ void template2(char str2[LENGTH][LENGTH])
     {
         str2[j + 6][0] = '2';
         for (int i = 0; i < 9; i++)
-            str2[j + 6][i+1] = ' ';
+            str2[j + 6][i + 1] = ' ';
         str2[j + 6][10] = '\0';
     }
 
@@ -326,30 +376,38 @@ void whatIsTheDigit(int digit, int index)
     }
 }
 
-void printTime(int time, int index)
+void printDots(int index)
 {
-    if (time < 10)
+    cout << dots[index];
+    cout << colon[index];
+}
+
+void printTime(int num, int index)
+{
+    if (num < 10)
     {
         cout << str0[index];
         cout << colon[index];
-        whatIsTheDigit(time, index);
+        whatIsTheDigit(num, index);
         cout << colon[index];
     }
     else
     {
-        whatIsTheDigit(time / 10, index);
+        whatIsTheDigit(num / 10, index);
         cout << colon[index];
-        whatIsTheDigit(time % 10, index);
+        whatIsTheDigit(num % 10, index);
         cout << colon[index];
     }
 }
 
 int main()
 {
-    int time;
-    cin >> time;
+    int tm;
+    cin >> tm;
+    char R[16] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
 
     templateColon(colon);
+    templateDots(dots);
     template0(str0);
     template1(str1);
     template2(str2);
@@ -361,39 +419,74 @@ int main()
     template8(str8);
     template9(str9);
 
-   
-        int k = time;
+    while (tm >= 0)
+    {
+        int k = tm;
         int sec = k % 60;
         k /= 60;
         int min = k % 60;
         k /= 60;
         int hours = k;
+        if (hours > 23)
+        {
+            cout << "-1";
+            return 0;
+        }
 
-        //while (time > 0)
-       // {
-           // system("CLS");
-            cout << hours;
+        system("CLS");
 
-            for (int i = 0; i < LENGTH; i++)
+        for (int i = 0; i < 7; i++)
+            cout << endl;
+
+        for (int i = 0; i < LENGTH; i++)
+        {
+            int Ra = rand() % 16;
+            if (tm < 900 && tm > 60)
+                Ra = 6;
+            else if (tm < 60)
+                Ra = 4;
+
+            srand(time(NULL));
+            char color_string[20];
+            sprintf_s(color_string, "color %c%c", R[Ra], 0);
+            system(color_string);
+
+            if (hours > 0)
             {
-                if (hours > 0)
-                {
-                    printTime(hours, i);
-                    printTime(min, i);
-                    printTime(sec, i);
-                }
-                else if (min > 0)
-                {
-                    printTime(min, i);
-                    printTime(sec, i);
-                }
-                else
-                    printTime(sec, i);
-                cout << endl;
+                cout << " ";
+                printTime(hours, i);
+                printDots(i);
+                printTime(min, i);
+                printDots(i);
+                printTime(sec, i);
             }
-         /*   Sleep(1000);
-            time--;*/
-        //}
-    
+            else if (min > 0)
+            {
+                for (int j = 0; j < 15; j++)
+                    cout << " ";
+                printTime(min, i);
+                printDots(i);
+                printTime(sec, i);
+            }
+            else
+            {
+                for (int j = 0; j < 29; j++)
+                    cout << " ";
+                printTime(sec, i);
+            }
+            cout << endl;
+        }
+
+        for (int i = 0; i < 7; i++)
+            cout << endl;
+        if (tm == 0)
+            cout << '\a';
+        Sleep(1000);
+        tm--;
+        system("CLS");
+
+    }
+
     return 0;
 }
+
